@@ -47,6 +47,9 @@ dependencies:
   cached_network_image: ^3.4.1
   timeago: ^3.7.1
   provider: ^6.1.5+1
+  firebase_messaging: ^16.0.3
+  flutter_local_notifications: ^19.5.0
+  webview_flutter: ^4.10.0
 
 
 

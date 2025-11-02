@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tiktok_clone/Chat/controller/ChatProvider.dart';
@@ -26,8 +25,8 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<ChatProvider>(context, listen: false)
-          .fetchUserInfo(widget.receiver);
+      final chatProvider = Provider.of<ChatProvider>(context, listen: false);
+      chatProvider.fetchUserInfo(widget.receiver);
     });
   }
 
@@ -281,7 +280,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 if (chatProvider.messageText != null &&
                     chatProvider.messageText!.trim().isNotEmpty)
                   Container(
-                    color: Colors.white,
                     child: IconButton(
                       icon: const Icon(Icons.send, color: Colors.blue),
                       onPressed: () async {

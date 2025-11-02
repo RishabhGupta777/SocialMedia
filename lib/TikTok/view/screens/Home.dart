@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:tiktok_clone/Chat/view/screens/chat_users.dart';
+import 'package:tiktok_clone/College/view/screens/college_home_screen.dart';
 import 'package:tiktok_clone/TikTok/constants.dart';
 import 'package:tiktok_clone/TikTok/view/screens/add_video.dart';
 import 'package:tiktok_clone/TikTok/view/screens/display_screen.dart';
@@ -41,6 +42,12 @@ type: BottomNavigationBarType.fixed,
           ),
 
           BottomNavigationBarItem(
+              icon: Icon(Icons.dynamic_feed_outlined, size: 25),
+              label: 'Feed'
+
+          ),
+
+          BottomNavigationBarItem(
               icon: Icon(Icons.video_collection_outlined, size: 25),
               label: 'Shorts'
 
@@ -67,6 +74,7 @@ type: BottomNavigationBarType.fixed,
       ),
       body: Center(
         child: [
+          CollegeHomeScreen(),
           FeedScreen(),
           DisplayVideo_Screen(),
           addVideoScreen(),
