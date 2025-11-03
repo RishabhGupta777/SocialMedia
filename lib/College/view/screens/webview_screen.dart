@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewScreen extends StatefulWidget {
@@ -28,6 +29,18 @@ class _WebViewScreenState extends State<WebViewScreen> {
                   // which expects a value between 0.0 (empty) and 1.0 (full).
                 });
               },
+            onNavigationRequest: (NavigationRequest request) async {
+              // ✅ Detect PDF URLs and open externally in Chrome
+              if (request.url.toLowerCase().endsWith('.pdf')) {
+                final uri = Uri.parse(request.url);
+                await launchUrl(
+                  uri,
+                  mode: LaunchMode.externalApplication, // ensures Chrome/system browser
+                );
+                return NavigationDecision.prevent;
+              }
+              return NavigationDecision.navigate;
+            },
             onPageFinished: (String url) {  //The initial URL (widget.url) is just what was requested, but the final loaded URL might change.so String url provides the actual URL of the page that has finished loading.
               setState(() {
                 _progress = 0; // Hide progress bar when loading is complete-->Resets _progress to 0 when the page finishes loading.
