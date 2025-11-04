@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:provider/provider.dart';
+import 'package:tiktok_clone/College/controller/attendance_provider.dart';
+
 class ShowAttendanceScreen extends StatefulWidget {
   final String username;
   final String password;
@@ -37,6 +40,10 @@ class _ShowAttendanceScreenState extends State<ShowAttendanceScreen> {
           attendanceData = jsonDecode(response.body);
           isLoading = false;
         });
+        // ✅ Save login only after successful fetch
+        final provider =
+        Provider.of<AttendanceProvider>(context, listen: false);
+        await provider.saveLogin(widget.username, widget.password);
       } else {
         setState(() {
           isLoading = false;
@@ -59,6 +66,17 @@ class _ShowAttendanceScreenState extends State<ShowAttendanceScreen> {
         title: const Text("Attendance Summary"),
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: "Logout",
+            onPressed: () {
+              final provider =
+              Provider.of<AttendanceProvider>(context, listen: false);
+              provider.logout();
+            },
+          ),
+        ],
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())

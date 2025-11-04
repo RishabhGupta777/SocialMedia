@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tiktok_clone/Chat/controller/ChatProvider.dart';
 import 'package:tiktok_clone/Chat/controller/select_person_provider.dart';
+import 'package:tiktok_clone/College/controller/attendance_provider.dart';
 import 'package:tiktok_clone/TikTok/view/screens/Home.dart';
 
 import 'TikTok/constants.dart';
@@ -21,6 +22,7 @@ void main()  async{
         providers: [
           ChangeNotifierProvider(create: (context) => ChatProvider()),
           ChangeNotifierProvider(create: (context) => SelectPersonProvider()),
+          ChangeNotifierProvider(create: (context) =>AttendanceProvider()),
         ],
         child: const MyApp(), // Use 'const' with the constructor to improve performance.
       )
