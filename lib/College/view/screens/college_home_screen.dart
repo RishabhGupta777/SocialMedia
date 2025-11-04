@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiktok_clone/College/view/screens/attendence_login_screen.dart';
 import 'package:tiktok_clone/College/view/screens/webview_screen.dart';
 
 class CollegeHomeScreen extends StatelessWidget {
@@ -78,7 +79,7 @@ class CollegeHomeScreen extends StatelessWidget {
                   color: Colors.purple,
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const WebViewScreen(url: 'https://atchecker.dcrust.aruns.co.in/'),),
+                      builder: (context) => AttendanceLoginScreen(),),
                     );
                   },
                 ),
