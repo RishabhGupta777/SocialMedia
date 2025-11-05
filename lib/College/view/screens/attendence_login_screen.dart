@@ -43,12 +43,12 @@ class _AttendanceLoginScreenState extends State<AttendanceLoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TRoundedContainer(
-              height: 178,
-              width: 200,
-              child: Image.asset('assets/images/DCRUST_logo.jpeg'),
+              height: 190,
+              width: 190,
+              child: Image.asset('assets/images/dcrust_logo.png'),
             ),
             SizedBox(height: 20,),
-            GlithEffect(child: const Text("DCRUST ATTENDANCE" ,style: TextStyle(fontWeight: FontWeight.w900 , fontSize: 25),)),
+            GlithEffect(child: const Text("DCRUST ATTENDANCE" ,style: TextStyle(fontWeight: FontWeight.w900 , fontSize: 23),)),
             SizedBox(height: 20,),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
