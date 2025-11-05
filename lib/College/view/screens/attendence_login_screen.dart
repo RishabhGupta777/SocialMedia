@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tiktok_clone/College/controller/attendance_provider.dart';
 import 'package:tiktok_clone/College/view/screens/show_attendance_screen.dart';
 import 'package:tiktok_clone/TikTok/view/widgets/glitch.dart';
+import 'package:tiktok_clone/TikTok/view/widgets/rounded_container.dart';
 import 'package:tiktok_clone/TikTok/view/widgets/text_input.dart';
 
 class AttendanceLoginScreen extends StatefulWidget {
@@ -38,12 +39,17 @@ class _AttendanceLoginScreenState extends State<AttendanceLoginScreen> {
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
-        //const - Constant - Value - String , Int  - Fix Rahega  - Use Karna
         child : Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GlithEffect(child: const Text("DCRUST ATTENDANCE" ,style: TextStyle(fontWeight: FontWeight.w900 , fontSize: 30),)),
-            SizedBox(height: 25,),
+            TRoundedContainer(
+              height: 178,
+              width: 200,
+              child: Image.asset('assets/images/DCRUST_logo.jpeg'),
+            ),
+            SizedBox(height: 20,),
+            GlithEffect(child: const Text("DCRUST ATTENDANCE" ,style: TextStyle(fontWeight: FontWeight.w900 , fontSize: 25),)),
+            SizedBox(height: 20,),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
               child: TextInputField(
@@ -57,7 +63,7 @@ class _AttendanceLoginScreenState extends State<AttendanceLoginScreen> {
               margin: EdgeInsets.symmetric(horizontal: 20),
               child: TextInputField(
                 controller: _passwordController,
-                myLabelText: "Password",
+                myLabelText: "Samarth Portal Password",
                 myIcon: Icons.lock,
                 toHide: true,
               ),
@@ -79,7 +85,7 @@ class _AttendanceLoginScreenState extends State<AttendanceLoginScreen> {
                   ));
                 },
                 child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 50 , vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal:10 , vertical: 10),
 
                 child: Text("Get Attendance"))),
           ],
