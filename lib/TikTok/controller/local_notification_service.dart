@@ -1,5 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:tiktok_clone/TikTok/view/screens/notification_screen.dart';
 
 class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
@@ -9,7 +11,7 @@ class LocalNotificationService {
   static void initialize() {
     // Android initialization settings
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings("@mipmap/ic_launcher");
+    AndroidInitializationSettings("@mipmap/dcrust_logo");
 
     // Combine platform settings
     const InitializationSettings initializationSettings =
@@ -27,11 +29,7 @@ class LocalNotificationService {
 
           // You can handle navigation here if needed
           // Example:
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => DemoScreen(id: payload),
-          //   ),
-          // );
+          Get.to(() => NotificationScreen(id: payload));
         }
       },
     );

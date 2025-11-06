@@ -1,14 +1,16 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tiktok_clone/TikTok/controller/local_notification_service.dart';
+import 'package:tiktok_clone/TikTok/view/screens/notification_screen.dart';
 
 class FirebaseNotificationService with ChangeNotifier {
 
   FirebaseNotificationService() {
-    _initFirebaseMessaging();
+    initFirebaseMessaging();
   }
 
-  void _initFirebaseMessaging() {
+  void initFirebaseMessaging() {
 
     // 1. This method call when app in terminated state and you get a notification
     // when you click on notification app open from terminated state and you can get notification data in this method
@@ -17,15 +19,9 @@ class FirebaseNotificationService with ChangeNotifier {
         print("FirebaseMessaging.instance.getInitialMessage");
         if (message != null) {
           print("New Notification");
-          // if (message.data['_id'] != null) {
-          //   Navigator.of(context).push(
-          //     MaterialPageRoute(
-          //       builder: (context) => DemoScreen(
-          //         id: message.data['_id'],
-          //       ),
-          //     ),
-          //   );
-          // }
+          if (message.data['_id'] != null) {
+            Get.to(()=>NotificationScreen(id: message.data['_id'],),);
+          }
         }
       },
     );
@@ -52,6 +48,9 @@ class FirebaseNotificationService with ChangeNotifier {
           print(message.notification!.title);
           print(message.notification!.body);
           print("message.data22 ${message.data['_id']}");
+          if (message.data['_id'] != null) {
+            Get.to(() => NotificationScreen(id: message.data['_id']));
+          }
         }
       },
     );
