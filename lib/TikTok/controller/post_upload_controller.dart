@@ -5,7 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiktok_clone/TikTok/model/post.dart';
-import 'package:tiktok_clone/TikTok/view/screens/Home.dart';
+import 'package:tiktok_clone/TikTok/view/screens/home_screen.dart';
 import 'package:uuid/uuid.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:path/path.dart' as pathLib; // for file extensions

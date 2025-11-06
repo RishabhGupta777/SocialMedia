@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:tiktok_clone/TikTok/model/user.dart';
-import 'package:tiktok_clone/TikTok/view/screens/Home.dart';
+import 'package:tiktok_clone/TikTok/view/screens/home_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/auth/login_screen.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
