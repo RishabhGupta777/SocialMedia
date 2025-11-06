@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/College/view/screens/attendence_login_screen.dart';
 import 'package:tiktok_clone/College/view/screens/webview_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CollegeHomeScreen extends StatelessWidget {
   const CollegeHomeScreen({super.key});
@@ -66,11 +67,13 @@ class CollegeHomeScreen extends StatelessWidget {
                   title: "STUDENTS PORTAL",
                   icon: Icons.school_outlined,   //account_circle
                   color: Colors.green,
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const WebViewScreen(url: 'https://www.dcrustedp.in/myexamlogin.php'),),
-                    );
-                  },
+                  onTap: () async {
+                final url = Uri.parse('https://www.dcrustedp.in/myexamlogin.php');
+                await launchUrl(
+                url,
+                mode: LaunchMode.inAppBrowserView,
+                );
+                },
                 ),
                 featureCard(
                   context,

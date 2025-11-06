@@ -79,7 +79,7 @@ type: BottomNavigationBarType.fixed,
           DisplayVideo_Screen(),
           addVideoScreen(),
           ChatUsers(),
-          ProfileScreen(uid: FirebaseAuth.instance.currentUser!.uid,),
+          ProfileScreen( uid: FirebaseAuth.instance.currentUser?.uid ?? ''),
         ][pageIdx],
       ),
     );

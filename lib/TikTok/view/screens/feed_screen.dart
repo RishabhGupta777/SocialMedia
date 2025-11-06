@@ -44,7 +44,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("NanoGram",
+                      Text("DCRUST",
                         style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w500,

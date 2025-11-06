@@ -3,6 +3,8 @@ import 'package:tiktok_clone/TikTok/controller/auth_controller.dart';
 import 'package:tiktok_clone/TikTok/view/widgets/glitch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tiktok_clone/TikTok/view/widgets/rounded_container.dart';
+
 
 
 import '../../widgets/text_input.dart';
@@ -27,7 +29,7 @@ class SignUpScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              GlithEffect(child: const Text("Welcome To TikTok" ,style: TextStyle(fontWeight: FontWeight.w900 , fontSize: 30),)),
+              GlithEffect(child: const Text("Welcome To DCRUST" ,style: TextStyle(fontWeight: FontWeight.w900 , fontSize: 30),)),
               SizedBox(height: 25,),
               InkWell(
                 onTap: () {
