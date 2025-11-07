@@ -62,7 +62,7 @@ class VideoUploadController extends GetxController{
     );
     await FirebaseFirestore.instance.collection("videos").doc(id).set(video.toJson());
     Get.snackbar("Video Uploaded Successfully", "Thank You Sharing Your Content");
-Get.to(HomeScreen());
+Get.offAll(HomeScreen());
     }catch(e){
 
       print(e);

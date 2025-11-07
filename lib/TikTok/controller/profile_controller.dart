@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:tiktok_clone/TikTok/model/post.dart';
+import 'package:tiktok_clone/TikTok/model/video.dart';
 
 class ProfileController extends GetxController{
 final Rx<Map<String, dynamic>> _user = Rx<Map<String, dynamic>>({});
@@ -18,17 +19,36 @@ RxBool isLoading = false.obs;
     getUserDat();
   }
 
+///Shorts Binding => Fetch all videos of this user
+Future<List<Video>> fetchUserVideos() async {
+  try {
+    var videosSnap = await FirebaseFirestore.instance
+        .collection('videos')
+        .where('uid', isEqualTo: _uid.value)
+        .orderBy("timestamp", descending: true)
+        .get();
+
+    return videosSnap.docs.map((doc) => Video.fromSnap(doc)).toList();
+  } catch (e) {
+    print("Error fetching user videos: $e");
+    return [];
+  }
+}
+
   getUserDat() async {
     try{
       isLoading.value = true;
 
       List<String> thumbnails = [];
     var myVideos = await FirebaseFirestore.instance.collection("videos").where(
-        "uid", isEqualTo: _uid.value).get();
+        "uid", isEqualTo: _uid.value).orderBy("timestamp", descending: true).get();
     for (int i = 0; i < myVideos.docs.length; i++) {
       thumbnails.add((myVideos.docs[i].data() as dynamic)['thumbnail']);
     }
 
+
+
+      ///Post Binding
       _posts.bindStream(
           FirebaseFirestore.instance
               .collection("posts")

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tiktok_clone/TikTok/model/video.dart';
 import 'package:tiktok_clone/TikTok/view/screens/comment_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/profile_screen.dart';
 import 'package:tiktok_clone/TikTok/view/widgets/AlbumRotator.dart';
@@ -10,7 +11,10 @@ import '../../controller/video_controller.dart';
 
 
 class DisplayVideo_Screen extends StatelessWidget {
-  DisplayVideo_Screen({Key? key}) : super(key: key);
+  final List<Video>? videos; // optional user-specific list
+  final int? initialIndex;
+
+  DisplayVideo_Screen({Key? key, this.videos, this.initialIndex}) : super(key: key);
 
   final VideoController videoController = Get.put(VideoController());
 
@@ -24,12 +28,17 @@ class DisplayVideo_Screen extends StatelessWidget {
 
     return Scaffold(
       body: Obx(() {
-        if (videoController.videoList.isEmpty) {
+        // Use custom list if passed, otherwise use global videoController
+        final videoList = videos ?? videoController.videoList;
+        if (videoList.isEmpty) {
           return Center(child: CircularProgressIndicator());
         }
         return PageView.builder(
             scrollDirection: Axis.vertical,
-            controller: PageController(initialPage: 0, viewportFraction: 1),
+            controller: PageController(
+                initialPage:initialIndex ?? 0,
+                viewportFraction: 1
+            ),
             itemCount: videoController.videoList.length,
             itemBuilder: (context, index) {
               final data = videoController.videoList[index];

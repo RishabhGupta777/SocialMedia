@@ -27,7 +27,7 @@ class Video{
   required this.shareCount,
   required this.songName,
   required this.videoUrl,
-   this.timestamp
+  required this.timestamp
 });
 
   Map<String, dynamic> toJson()=>{

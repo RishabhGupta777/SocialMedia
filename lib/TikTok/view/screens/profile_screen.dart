@@ -7,6 +7,8 @@ import 'package:tiktok_clone/TikTok/constants.dart';
 import 'package:tiktok_clone/TikTok/controller/auth_controller.dart';
 import 'package:tiktok_clone/TikTok/controller/edit_profile_controller.dart';
 import 'package:tiktok_clone/TikTok/controller/profile_controller.dart';
+import 'package:tiktok_clone/TikTok/model/video.dart';
+import 'package:tiktok_clone/TikTok/view/screens/display_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/edit_profile_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/followers_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/followings_screen.dart';
@@ -300,11 +302,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           itemBuilder: (context,index) {
                             String thumbnail =
                             controller.user['thumbnails'][index];
-                            return CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: thumbnail,
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                            return GestureDetector(
+                              onTap: () async {
+                                ///Fetch videos from controller
+                                List<Video> userVideos = await controller.fetchUserVideos();
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DisplayVideo_Screen(
+                                      videos: userVideos,
+                                      initialIndex: index,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                imageUrl: thumbnail,
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                              ),
                             );
                           }),
                     ],
