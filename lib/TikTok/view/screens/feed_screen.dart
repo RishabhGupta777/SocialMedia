@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tiktok_clone/Chat/view/screens/chat_users.dart';
 import 'package:tiktok_clone/TikTok/controller/post_controller.dart';
 import 'package:tiktok_clone/TikTok/controller/profile_controller.dart';
 import 'package:tiktok_clone/TikTok/controller/profile_info_controller.dart';
@@ -50,11 +51,22 @@ class _FeedScreenState extends State<FeedScreen> {
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
                       ),),
-                      IconButton(
-                          onPressed:(){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchScreen()));
-                          },
-                          icon: Icon(Icons.search_rounded))
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed:(){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchScreen()));
+                              },
+                              icon: Icon(Icons.search_rounded)
+                          ),
+                          IconButton(
+                              onPressed:(){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatUsers()));
+                              },
+                              icon: Icon(Icons.message_outlined)
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),

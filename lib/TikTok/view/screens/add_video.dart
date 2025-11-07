@@ -52,7 +52,7 @@ videoPick(ImageSource src , BuildContext context) async{
               color: buttonColor
             ),
             child: Center(
-              child: Text("Add Video" , style: TextStyle(
+              child: Text("Add Shorts" , style: TextStyle(
                 fontSize: 25,
                 color: Colors.white,
                 fontWeight: FontWeight.bold

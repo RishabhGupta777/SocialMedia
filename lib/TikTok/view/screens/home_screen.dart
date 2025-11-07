@@ -55,11 +55,6 @@ type: BottomNavigationBarType.fixed,
 
           ),
 
-          BottomNavigationBarItem(
-              icon: Icon(Icons.video_collection_outlined, size: 25),
-              label: 'Shorts'
-
-          ),
 
           BottomNavigationBarItem(
               icon: customAddIcon(),
@@ -68,10 +63,16 @@ type: BottomNavigationBarType.fixed,
           ),
 
           BottomNavigationBarItem(
-              icon: Icon(Icons.message, size: 25),
-              label: 'Messages'
+              icon: Icon(Icons.video_collection_outlined, size: 25),
+              label: 'Shorts'
 
           ),
+
+          // BottomNavigationBarItem(
+          //     icon: Icon(Icons.message, size: 25),
+          //     label: 'Messages'
+          //
+          // ),
 
           BottomNavigationBarItem(
               icon: Icon(Icons.person, size: 25),
@@ -84,9 +85,9 @@ type: BottomNavigationBarType.fixed,
         child: [
           CollegeHomeScreen(),
           FeedScreen(),
-          DisplayVideo_Screen(),
           addVideoScreen(),
-          ChatUsers(),
+          DisplayVideo_Screen(),
+          // ChatUsers(),
           ProfileScreen( uid: FirebaseAuth.instance.currentUser?.uid ?? ''),
         ][pageIdx],
       ),
