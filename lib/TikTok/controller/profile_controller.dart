@@ -10,6 +10,10 @@ Map<String, dynamic> get user => _user.value;
 
 final Rx<List<Post>> _posts = Rx<List<Post>>([]);
 List<Post> get posts => _posts.value;
+
+final Rx<List<Video>> _shorts = Rx<List<Video>>([]);
+List<Video> get shorts => _shorts.value;
+
 RxBool isLoading = false.obs;
   Rx<String> _uid = "".obs;
 
@@ -19,21 +23,6 @@ RxBool isLoading = false.obs;
     getUserDat();
   }
 
-///Shorts Binding => Fetch all videos of this user
-Future<List<Video>> fetchUserVideos() async {
-  try {
-    var videosSnap = await FirebaseFirestore.instance
-        .collection('videos')
-        .where('uid', isEqualTo: _uid.value)
-        .orderBy("timestamp", descending: true)
-        .get();
-
-    return videosSnap.docs.map((doc) => Video.fromSnap(doc)).toList();
-  } catch (e) {
-    print("Error fetching user videos: $e");
-    return [];
-  }
-}
 
   getUserDat() async {
     try{
@@ -47,14 +36,31 @@ Future<List<Video>> fetchUserVideos() async {
     }
 
 
+    ///Shorts
+      _shorts.value=[];
+      _shorts.bindStream(
+          FirebaseFirestore.instance
+              .collection("videos")
+              .orderBy("timestamp", descending: true)
+              .where("uid", isEqualTo: _uid.value)
+              .snapshots()
+              .map((QuerySnapshot query){
+            List<Video> retVal  = [];
+            for(var element in query.docs){
+              retVal.add(Video.fromSnap(element));
+            }
+            return retVal;
+          }));
 
       ///Post Binding
+      _posts.value=[];
       _posts.bindStream(
           FirebaseFirestore.instance
               .collection("posts")
               .orderBy("datePub", descending: true)
-              .where(
-          "uid", isEqualTo: _uid.value).snapshots().map((QuerySnapshot query){
+              .where("uid", isEqualTo: _uid.value)
+              .snapshots()
+              .map((QuerySnapshot query){
         List<Post> retVal  = [];
         for(var element in query.docs){
           retVal.add(Post.fromSnap(element));

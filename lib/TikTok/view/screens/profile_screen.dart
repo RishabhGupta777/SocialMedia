@@ -305,13 +305,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             return GestureDetector(
                               onTap: () async {
                                 ///Fetch videos from controller
-                                List<Video> userVideos = await controller.fetchUserVideos();
-
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
+                                Navigator.push(context, MaterialPageRoute(
                                     builder: (context) => DisplayVideo_Screen(
-                                      videos: userVideos,
+                                      videos: controller.shorts.obs,
                                       initialIndex: index,
                                     ),
                                   ),

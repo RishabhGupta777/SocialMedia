@@ -11,7 +11,7 @@ import '../../controller/video_controller.dart';
 
 
 class DisplayVideo_Screen extends StatelessWidget {
-  final List<Video>? videos; // optional user-specific list
+  final RxList<Video>? videos; // optional user-specific list
   final int? initialIndex;
 
   DisplayVideo_Screen({Key? key, this.videos, this.initialIndex}) : super(key: key);
@@ -39,9 +39,9 @@ class DisplayVideo_Screen extends StatelessWidget {
                 initialPage:initialIndex ?? 0,
                 viewportFraction: 1
             ),
-            itemCount: videoController.videoList.length,
+            itemCount: videoList.length,
             itemBuilder: (context, index) {
-              final data = videoController.videoList[index];
+              final data = videoList[index];
               return InkWell(
                 onDoubleTap: (){
                   videoController.likedVideo(data.id);
