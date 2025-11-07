@@ -57,7 +57,8 @@ class VideoUploadController extends GetxController{
       likes: [],
       profilePic: (userDoc.data()! as Map<String , dynamic>)['profilePic'],
       caption: caption,
-      id: id
+      id: id,
+      timestamp: FieldValue.serverTimestamp(),
     );
     await FirebaseFirestore.instance.collection("videos").doc(id).set(video.toJson());
     Get.snackbar("Video Uploaded Successfully", "Thank You Sharing Your Content");

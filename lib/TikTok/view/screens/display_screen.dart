@@ -34,9 +34,6 @@ class DisplayVideo_Screen extends StatelessWidget {
             itemBuilder: (context, index) {
               final data = videoController.videoList[index];
               return InkWell(
-                onTap: (){
-
-                },
                 onDoubleTap: (){
                   videoController.likedVideo(data.id);
                 },
@@ -157,10 +154,14 @@ class DisplayVideo_Screen extends StatelessWidget {
                               },
                               child: Column(
                                 children: [
-                                  Icon(
-                                    Icons.reply_outlined,
-                                    size: 45,
-                                    color: Colors.white,
+                                  Transform(
+                                    alignment: Alignment.center,
+                                    transform: Matrix4.rotationY(3.1416),  // Flip horizontally (180°) the forward icon to lo
+                                    child: Icon(
+                                      Icons.reply_outlined,
+                                      size: 45,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                   Text(
                                     data.shareCount.toString(),

@@ -25,6 +25,7 @@ class AttachIcons extends StatelessWidget {
             borderRadius:BorderRadius.circular(10.0) ,
           ),
           child: IconButton(onPressed:onPressed, icon:icon),),
+        SizedBox(height: 1,),
         iconName
       ],
     );

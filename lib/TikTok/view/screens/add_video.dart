@@ -1,9 +1,11 @@
+import 'package:tiktok_clone/Chat/view/widgets/attach_icons.dart';
 import 'package:tiktok_clone/TikTok/constants.dart';
 import 'package:tiktok_clone/TikTok/view/screens/addcaption_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tiktok_clone/TikTok/view/screens/create_post_screen.dart';
 import 'dart:io';
-
+import 'package:tiktok_clone/TikTok/view/widgets/button.dart';
 import 'package:image_picker/image_picker.dart';
 
 class addVideoScreen extends StatelessWidget {
@@ -22,14 +24,24 @@ videoPick(ImageSource src , BuildContext context) async{
      return showDialog(context: context, builder: (context)=>
      SimpleDialog(
        children: [
-         SimpleDialogOption(
-           onPressed: ()=>videoPick(ImageSource.gallery , context),
-           child: Text("Gallery"),
+         Padding(
+           padding: const EdgeInsets.only(top:20.0),
+           child: Row(
+             mainAxisAlignment: MainAxisAlignment.center,
+             children: [
+               AttachIcons(
+                   onPressed:()=>videoPick(ImageSource.gallery , context),
+                   icon: Icon(Icons.photo_library_outlined,color: Colors.blue,),
+                   iconName: Text("Gallery")),
+               SizedBox(width: 50,),
+               AttachIcons(
+                   onPressed:()=>videoPick(ImageSource.camera , context),
+                   icon: Icon(Icons.camera_alt_outlined,color: Colors.red,),
+                   iconName: Text('Camera')),
+             ],
+           ),
          ),
-         SimpleDialogOption(
-           onPressed: ()=>videoPick(ImageSource.camera , context),
-           child: Text("Camera"),
-         ),
+         SizedBox(height: 10,),
          SimpleDialogOption(
            onPressed: (){
              Navigator.pop(context);
@@ -43,22 +55,25 @@ videoPick(ImageSource src , BuildContext context) async{
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: InkWell(
-          onTap: () => showDialogOpt(context),
-          child: Container(
-            width: 190,
-            height: 50,
-            decoration: BoxDecoration(
-              color: buttonColor
-            ),
-            child: Center(
-              child: Text("Add Shorts" , style: TextStyle(
-                fontSize: 25,
-                color: Colors.white,
-                fontWeight: FontWeight.bold
-              ),),
-            ),
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TButton(
+                text: "Add Shorts",
+                height: 35,
+                width: 190,
+                textColor: Colors.black,
+                onTap:()=>showDialogOpt(context)),
+            SizedBox(height: 20,),
+            TButton(
+                text: "Create a Post",
+                height: 35,
+                width: 190,
+                textColor: Colors.black,
+                onTap:(){
+                  Get.to(() => CreatePostScreen());
+                }),
+          ],
         ),
       ),
     );

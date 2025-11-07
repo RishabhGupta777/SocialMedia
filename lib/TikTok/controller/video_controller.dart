@@ -11,7 +11,7 @@ class VideoController extends GetxController{
   @override
   void onInit() {
     super.onInit();
-    _videoList.bindStream(FirebaseFirestore.instance.collection("videos").snapshots().map((QuerySnapshot query){
+    _videoList.bindStream(FirebaseFirestore.instance.collection("videos").orderBy("timestamp", descending: true).snapshots().map((QuerySnapshot query){
       List<Video> retVal  = [];
       for(var element in query.docs){
         retVal.add(Video.fromSnap(element));
