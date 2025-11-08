@@ -56,9 +56,10 @@ class CollegeHomeScreen extends StatelessWidget {
                   title: "College Website",
                   icon: Icons.language,
                   color: Colors.blueAccent,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const WebViewScreen(url: 'https://www.dcrustm.ac.in/'),),
+                  onTap: () async{
+                    await launchUrl(
+                      Uri.parse('https://www.dcrustm.ac.in/'),
+                      mode: LaunchMode.inAppBrowserView,
                     );
                   },
                 ),
@@ -102,10 +103,11 @@ class CollegeHomeScreen extends StatelessWidget {
                   title: "Exam Papers",
                   icon: Icons.menu_book,
                   color: Colors.yellowAccent,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const WebViewScreen(url: 'https://www.dcrustedp.in/dcrustpqp.php'),),
-                    );
+                  onTap: () async{
+                      await launchUrl(
+                         Uri.parse('https://www.dcrustedp.in/dcrustpqp.php'),
+                         mode: LaunchMode.inAppBrowserView,
+                      );
                   },
                 ),
                 featureCard(
@@ -124,21 +126,23 @@ class CollegeHomeScreen extends StatelessWidget {
                   title: "Hostel Fee Payment",
                   icon: Icons.home_work,
                   color: Colors.orange,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const WebViewScreen(url: ''),),
+                  onTap: () async{
+                    await launchUrl(
+                      Uri.parse('https://form.qfixonline.com/dcrusthostelsallotmentfees'),
+                      mode: LaunchMode.inAppBrowserView,
                     );
                   },
                 ),
 
                 featureCard(
                   context,
-                  title: "Time Table",
+                  title: "DateSheet",
                   icon: Icons.calendar_month_outlined,
                   color: Colors.indigo,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const WebViewScreen(url: ''),),
+                  onTap: () async{
+                    await launchUrl(
+                      Uri.parse('https://www.dcrustedp.in/datesheetNew.php'),
+                      mode: LaunchMode.inAppBrowserView,
                     );
                   },
                 ),
