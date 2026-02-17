@@ -32,15 +32,24 @@ class _ShowAttendanceScreenState extends State<ShowAttendanceScreen> {
 
   Future<void> getData() async {
     try {
-      final response = await http.get(Uri.parse(
-          'https://atchecker.dcrust.aruns.co.in/api/v2/attendance?tenant=dcrustm&username=${widget.username}&password=${widget.password}'));
+      final uri = Uri.https(
+        'a10dance.com',
+        '/api/v2/attendance',
+        {
+          'tenant': 'dcrustm',
+          'username': widget.username,
+          'password': widget.password, // auto-encoded safely
+        },
+      );
+
+      final response = await http.get(uri);
 
       if (response.statusCode == 200) {
         setState(() {
           attendanceData = jsonDecode(response.body);
           isLoading = false;
         });
-        // ✅ Save login only after successful fetch
+        //  Save login only after successful fetch
         final provider =
         Provider.of<AttendanceProvider>(context, listen: false);
         await provider.saveLogin(widget.username, widget.password);

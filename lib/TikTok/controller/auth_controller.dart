@@ -44,11 +44,18 @@ this.proimg.value = img;
     //Rx - Observable Keyword - Continously Checking Variable Is Changing Or Not.
   }
 
-  _setInitialView(User? user){
+  _setInitialView(User? user) async {
     if(user == null){
       Get.offAll(()=> LoginScreen());
     }else{
-      Get.offAll(() => HomeScreen());
+      await user.reload();
+      if (user.emailVerified) {
+        Get.offAll(() => HomeScreen());
+      } else {
+        Get.offAll(() => LoginScreen());
+        Get.snackbar("Verify Email",
+            "Please verify your email before accessing the app.");
+      }
     }
   }
 
@@ -68,12 +75,20 @@ this.proimg.value = img;
           image != null) {
         UserCredential credential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
+
+        // 🔹 SEND EMAIL VERIFICATION
+        await credential.user!.sendEmailVerification();
+
        String downloadUrl = await _uploadProPic(image);
 
         myUser user = myUser(name: username, email: email, profilePhoto: downloadUrl, uid: credential.user!.uid);
 
         await FirebaseFirestore.instance.collection('users').doc(credential.user!.uid).set(user.toJson());
 
+        Get.snackbar("Verify Email",
+            "Verification link sent to your email. Please verify before login.");
+        await FirebaseAuth.instance.signOut();
+        Get.offAll(() => LoginScreen());
       }
     } catch (e) {
       print(e);
@@ -96,19 +111,44 @@ this.proimg.value = img;
 
   void login(String email, String password) async
   {
-
     try{
   if(email.isNotEmpty && password.isNotEmpty){
-    await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+    UserCredential credential = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
+
+    //check verified id
+    await credential.user!.reload();
+
+    if (!credential.user!.emailVerified) {
+      Get.snackbar(
+          "Email not verified", "Please verify your email first.");
+      // 🔹 SEND EMAIL VERIFICATION
+      await credential.user!.sendEmailVerification();
+      Get.snackbar("Verify Email",
+          "Verification link sent to your email. Please verify before login.");
+      await FirebaseAuth.instance.signOut();
+      Get.offAll(() => LoginScreen());
+      return;
+    }
+
+
   }else{
     Get.snackbar("Error Logging In", "Please enter all the fields");
   }
-
-
     }catch(e){
 Get.snackbar("Error Logging In",e.toString());
     }
   }
+
+  // // RESEND EMAIL VERIFICATION
+  // void resendVerificationEmail() async {
+  //   try {
+  //     await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+  //     Get.snackbar("Sent", "Verification email sent again.");
+  //   } catch (e) {
+  //     Get.snackbar("Error", e.toString());
+  //   }
+  // }
 
   signOut(){
     FirebaseAuth.instance.signOut();
