@@ -1,4 +1,5 @@
 import 'package:tiktok_clone/TikTok/controller/auth_controller.dart';
+import 'package:tiktok_clone/TikTok/view/screens/auth/forgot_password_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/auth/signup_screen.dart';
 import 'package:tiktok_clone/TikTok/view/widgets/glitch.dart';
 import 'package:flutter/cupertino.dart';
@@ -49,17 +50,27 @@ TextEditingController _passwordController = new TextEditingController();
                   toHide: true,
                 ),
               ),
-              SizedBox(height: 30,),
-              ElevatedButton(onPressed: (){
-                AuthController.instance.login(_emailController.text, _passwordController.text);
-              }, child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 50 , vertical: 10),
-          
-                  child: Text("Login"))),
-          
-          
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:9.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(width: 10),
+                    TextButton(onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPasswordScreen()));
+                    }, child: Text("Forgot password?")),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                  onPressed: (){
+                           AuthController.instance.login(_emailController.text, _passwordController.text);},
+                  child: Container(
+                         padding: EdgeInsets.symmetric(horizontal: 50 , vertical: 10),
+                         child: Text("Login"))
+              ),
+              SizedBox(height: 20,),
               TextButton(onPressed: (){
-          
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUpScreen()));
               }, child: Text("New User ? Click Here"))
             ],

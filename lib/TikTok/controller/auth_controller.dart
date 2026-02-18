@@ -154,4 +154,28 @@ Get.snackbar("Error Logging In",e.toString());
     FirebaseAuth.instance.signOut();
     Get.offAll(LoginScreen());
   }
+
+  ///forgot password
+  void resetPassword(String email) async {
+    try {
+      if (email.isEmpty) {
+        Get.snackbar("Error", "Please enter your email");
+        return;
+      }
+
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
+      Get.snackbar(
+        "Password Reset",
+        "Password reset link sent to your email",
+      );
+
+      Get.offAll(() => LoginScreen());
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
+
+
+
 }
