@@ -90,14 +90,27 @@ class CollegeHomeScreen extends StatelessWidget {
                 featureCard(
                   context,
                   title: "Mess Bill Payment",
-                  icon: Icons.payment,
+                  icon: Icons.payment,   //account_circle
                   color: Colors.teal,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const WebViewScreen(url: 'https://www.eduqfix.com/PayDirect/#/student'),),
+                  onTap: () async {
+                    final url = Uri.parse('https://paydirect.eduqfix.com/app/ivc8qLFIfMH3IkmOAJJkSR5K6fH7m1ouD734FXKDUWdtf0JWkIDM7EKkYVHPP3bM/2663/');
+                    await launchUrl(
+                      url,
+                      mode: LaunchMode.inAppBrowserView,
                     );
                   },
                 ),
+                // featureCard(
+                //   context,
+                //   title: "Mess Bill Payment",
+                //   icon: Icons.payment,
+                //   color: Colors.teal,
+                //   onTap: () {
+                //     Navigator.push(context, MaterialPageRoute(
+                //       builder: (context) => const WebViewScreen(url: 'https://paydirect.eduqfix.com/app/ivc8qLFIfMH3IkmOAJJkSR5K6fH7m1ouD734FXKDUWdtf0JWkIDM7EKkYVHPP3bM/2663/'),),
+                //     );
+                //   },
+                // ),
                 featureCard(
                   context,
                   title: "Exam Papers",

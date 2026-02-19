@@ -54,7 +54,7 @@ class _AttendanceLoginScreenState extends State<AttendanceLoginScreen> {
               margin: EdgeInsets.symmetric(horizontal: 20),
               child: TextInputField(
                 controller: _usernameController,
-                myLabelText: "Email",
+                myLabelText: "Roll No.",
                 myIcon: Icons.email,
               ),
             ),

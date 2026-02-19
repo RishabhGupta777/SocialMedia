@@ -1,6 +1,7 @@
 import 'package:tiktok_clone/TikTok/controller/auth_controller.dart';
 import 'package:tiktok_clone/TikTok/view/screens/auth/forgot_password_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/auth/signup_screen.dart';
+import 'package:tiktok_clone/TikTok/view/screens/auth/verify_email_screen.dart';
 import 'package:tiktok_clone/TikTok/view/widgets/glitch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -55,10 +56,12 @@ TextEditingController _passwordController = new TextEditingController();
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(width: 10),
+                    TextButton(onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>VerifyEmailScreen()));
+                    }, child:const Text("Resend email verification")),
                     TextButton(onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPasswordScreen()));
-                    }, child: Text("Forgot password?")),
+                    }, child:const Text("Forgot password?")),
                   ],
                 ),
               ),

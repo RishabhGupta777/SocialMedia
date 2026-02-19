@@ -87,7 +87,7 @@ this.proimg.value = img;
 
         Get.snackbar("Verify Email",
             "Verification link sent to your email. Please verify before login.");
-        await FirebaseAuth.instance.signOut();
+        // await FirebaseAuth.instance.signOut();
         Get.offAll(() => LoginScreen());
       }
     } catch (e) {
@@ -126,7 +126,7 @@ this.proimg.value = img;
       await credential.user!.sendEmailVerification();
       Get.snackbar("Verify Email",
           "Verification link sent to your email. Please verify before login.");
-      await FirebaseAuth.instance.signOut();
+      // await FirebaseAuth.instance.signOut();
       Get.offAll(() => LoginScreen());
       return;
     }
@@ -140,15 +140,15 @@ Get.snackbar("Error Logging In",e.toString());
     }
   }
 
-  // // RESEND EMAIL VERIFICATION
-  // void resendVerificationEmail() async {
-  //   try {
-  //     await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-  //     Get.snackbar("Sent", "Verification email sent again.");
-  //   } catch (e) {
-  //     Get.snackbar("Error", e.toString());
-  //   }
-  // }
+  // RESEND EMAIL VERIFICATION
+  void resendVerificationEmail() async {
+    try {
+      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+      Get.snackbar("Sent", "Verification email sent again.");
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
 
   signOut(){
     FirebaseAuth.instance.signOut();
