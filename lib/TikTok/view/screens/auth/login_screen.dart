@@ -56,9 +56,7 @@ TextEditingController _passwordController = new TextEditingController();
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextButton(onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>VerifyEmailScreen()));
-                    }, child:const Text("Resend email verification")),
+                    SizedBox(width: 10,),
                     TextButton(onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPasswordScreen()));
                     }, child:const Text("Forgot password?")),

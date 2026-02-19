@@ -17,8 +17,8 @@ class SearchUserController extends GetxController{
     _searchUsers.bindStream(
       FirebaseFirestore.instance
           .collection("users")
-          .where("name" , isGreaterThanOrEqualTo: query)
-          .where("name", isLessThan: query + 'z') // ensures partial matches
+          .where("nameLower" , isGreaterThanOrEqualTo: query)
+          .where("nameLower", isLessThan: query + 'z') // ensures partial matches
           .snapshots().
       map((QuerySnapshot queryRes){
         List<myUser> retVal = [];

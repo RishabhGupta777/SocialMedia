@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:tiktok_clone/TikTok/model/user.dart';
+import 'package:tiktok_clone/TikTok/view/screens/auth/verify_email_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/home_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/auth/login_screen.dart';
 import 'package:get/get.dart';
@@ -52,7 +53,7 @@ this.proimg.value = img;
       if (user.emailVerified) {
         Get.offAll(() => HomeScreen());
       } else {
-        Get.offAll(() => LoginScreen());
+        Get.offAll(() =>const VerifyEmailScreen());
         Get.snackbar("Verify Email",
             "Please verify your email before accessing the app.");
       }
@@ -61,34 +62,32 @@ this.proimg.value = img;
 
 
 
-  //User Register
-
+  ///User Register
   void SignUp(
       String username, String email, String password, File? image) async {
     try {
-      print("IMAGE HERE");
-      print(image.toString() == '');
-      print("IMAGE HERE");
-      if (username.isNotEmpty &&
-          email.isNotEmpty &&
-          password.isNotEmpty &&
-          image != null) {
+      if (username.isNotEmpty && email.isNotEmpty && password.isNotEmpty && image != null) {
         UserCredential credential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
 
-        // 🔹 SEND EMAIL VERIFICATION
+        // SEND EMAIL VERIFICATION
         await credential.user!.sendEmailVerification();
 
        String downloadUrl = await _uploadProPic(image);
 
         myUser user = myUser(name: username, email: email, profilePhoto: downloadUrl, uid: credential.user!.uid);
 
-        await FirebaseFirestore.instance.collection('users').doc(credential.user!.uid).set(user.toJson());
+        await FirebaseFirestore.instance.collection('users').doc(credential.user!.uid).set({
+          ...user.toJson(),   // spread the map
+          "nameLower": username.toLowerCase()  // Ram-->ram
+        });
 
         Get.snackbar("Verify Email",
             "Verification link sent to your email. Please verify before login.");
-        // await FirebaseAuth.instance.signOut();
-        Get.offAll(() => LoginScreen());
+      }
+      else{
+        Get.snackbar("Fill all the credentials",
+            "Uploading profile pic and name is Mandatory");
       }
     } catch (e) {
       print(e);
@@ -109,46 +108,37 @@ this.proimg.value = img;
   }
 
 
-  void login(String email, String password) async
-  {
-    try{
-  if(email.isNotEmpty && password.isNotEmpty){
-    UserCredential credential = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password);
+  void login(String email, String password) async {
+    try {
+      if (email.isEmpty || password.isEmpty) {
+        Get.snackbar("Error", "Enter email and password");
+        return;
+      }
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email, password: password);
 
-    //check verified id
-    await credential.user!.reload();
-
-    if (!credential.user!.emailVerified) {
-      Get.snackbar(
-          "Email not verified", "Please verify your email first.");
-      // 🔹 SEND EMAIL VERIFICATION
-      await credential.user!.sendEmailVerification();
-      Get.snackbar("Verify Email",
-          "Verification link sent to your email. Please verify before login.");
-      // await FirebaseAuth.instance.signOut();
-      Get.offAll(() => LoginScreen());
-      return;
-    }
-
-
-  }else{
-    Get.snackbar("Error Logging In", "Please enter all the fields");
-  }
-    }catch(e){
-Get.snackbar("Error Logging In",e.toString());
+    } catch (e) {
+      Get.snackbar("Login Error", e.toString());
     }
   }
 
-  // RESEND EMAIL VERIFICATION
+  /// RESEND EMAIL VERIFICATION
   void resendVerificationEmail() async {
     try {
-      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        Get.snackbar("Error", "Login first to resend verification email");
+        return;
+      }
+
+      await user.sendEmailVerification();
       Get.snackbar("Sent", "Verification email sent again.");
     } catch (e) {
       Get.snackbar("Error", e.toString());
     }
   }
+
 
   signOut(){
     FirebaseAuth.instance.signOut();
