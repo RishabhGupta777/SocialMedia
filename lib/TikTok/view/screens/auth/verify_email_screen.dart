@@ -62,76 +62,75 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     final userEmail = user.email ?? "No email";
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Verify Email")),
+      appBar: AppBar(title: const Text("Verify Email"),centerTitle: true,),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-
-            const SizedBox(height: 40),
-            const Icon(Icons.mark_email_unread, size: 90, color: Colors.blue),
-            const SizedBox(height: 20),
-            const Text(
-              "Verify your email address to continue",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
-            ),
-
-            const SizedBox(height: 30),
-
-            TextFormField(
-              initialValue: userEmail,
-              readOnly: true,
-              decoration: const InputDecoration(
-                labelText: "Registered Email",
-                prefixIcon: Icon(Icons.email),
-                border: OutlineInputBorder(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              const Text(
+                "After verifying, this screen will close automatically.",
+                style: TextStyle(color: Colors.grey),
               ),
-            ),
-
-            const SizedBox(height: 30),
-
-            /// RESEND EMAIL
-            ElevatedButton(
-              onPressed: () {
-                AuthController.instance.resendVerificationEmail();
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                child: Text("Resend Verification Email"),
+              const SizedBox(height: 40),
+              const Icon(Icons.mark_email_unread, size: 90, color: Colors.blue),
+              const SizedBox(height: 20),
+              const Text(
+                "Verify your email address to continue",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
               ),
-            ),
 
-            const SizedBox(height: 15),
+              const SizedBox(height: 30),
 
-            /// MANUAL CHECK BUTTON
-            ElevatedButton(
-              onPressed: () async {
-                await checkEmailVerified();
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                child: Text("I have verified"),
+              TextFormField(
+                initialValue: userEmail,
+                readOnly: true,
+                decoration: const InputDecoration(
+                  labelText: "Registered Email",
+                  prefixIcon: Icon(Icons.email),
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
 
-            const SizedBox(height: 15),
+              const SizedBox(height: 30),
 
-            /// SIGN OUT BUTTON
-            TextButton(
-              onPressed: () {
-                AuthController.instance.signOut();
-              },
-              child: const Text("Use different email"),
-            ),
+              /// RESEND EMAIL
+              ElevatedButton(
+                onPressed: () {
+                  AuthController.instance.resendVerificationEmail();
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  child: Text("Resend Verification Email"),
+                ),
+              ),
 
-            const Spacer(),
+              const SizedBox(height: 15),
 
-            const Text(
-              "After verifying, this screen will close automatically.",
-              style: TextStyle(color: Colors.grey),
-            )
-          ],
+              /// MANUAL CHECK BUTTON
+              ElevatedButton(
+                onPressed: () async {
+                  await checkEmailVerified();
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  child: Text("I have verified"),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              /// SIGN OUT BUTTON
+              TextButton(
+                onPressed: () {
+                  AuthController.instance.signOut();
+                },
+                child: const Text("Use different email"),
+              ),
+            ],
+          ),
         ),
       ),
     );

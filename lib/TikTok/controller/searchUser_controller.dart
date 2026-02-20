@@ -14,11 +14,13 @@ class SearchUserController extends GetxController{
       return;
     }
 
+    final q = query.toLowerCase();
+
     _searchUsers.bindStream(
       FirebaseFirestore.instance
           .collection("users")
-          .where("nameLower" , isGreaterThanOrEqualTo: query)
-          .where("nameLower", isLessThan: query + 'z') // ensures partial matches
+          .where("nameLower" , isGreaterThanOrEqualTo: q)
+          .where("nameLower", isLessThan: q + '\uf8ff') // ensures partial matches and '\uf8ff' is the largest Unicode character, so it ensures all matches like:
           .snapshots().
       map((QuerySnapshot queryRes){
         List<myUser> retVal = [];
