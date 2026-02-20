@@ -41,10 +41,14 @@ this.proimg.value = img;
   }
 
   _setInitialView(User? user) async {
+
+    // wait for splash animation to be visible
+    await Future.delayed(const Duration(seconds: 2));
+
     if(user == null){
       Get.offAll(()=> LoginScreen());
     }else{
-      await user.reload();  //->forces Firebase to fetch the latest user data from the server, instead of using the cached copy stored in your Flutter app.
+      // await user.reload();  //->forces Firebase to fetch the latest user data from the server, instead of using the cached copy stored in your Flutter app.
       if (user.emailVerified) {
         Get.offAll(() => HomeScreen());
       } else {
@@ -65,10 +69,7 @@ this.proimg.value = img;
         UserCredential credential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
 
-        // SEND EMAIL VERIFICATION
-        await credential.user!.sendEmailVerification();
-
-       String downloadUrl = await _uploadProPic(image);
+        String downloadUrl = await _uploadProPic(image);
 
         myUser user = myUser(name: username, email: email, profilePhoto: downloadUrl, uid: credential.user!.uid);
 
@@ -77,6 +78,8 @@ this.proimg.value = img;
           "nameLower": username.toLowerCase()  // Ram-->ram
         });
 
+        // SEND EMAIL VERIFICATION
+        await credential.user!.sendEmailVerification();
         Get.snackbar("Verify Email",
             "Verification link sent to your email. Please verify before login.");
       }

@@ -31,7 +31,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     _controller.forward();
 
     // After animation, AuthController will automatically route user
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 2), () {
       // Just trigger GetX lifecycle; no navigation here
     });
   }
@@ -51,10 +51,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           opacity: _fadeAnimation,
           child: ScaleTransition(
             scale: _scaleAnimation,
-            child:const Column(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.school, size: 90, color: primary),
+              children:[
+                Icon(Icons.school, size: 90, color:primary),
                 SizedBox(height: 20),
                 Text(
                   "Welcome to DCRUST",

@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
 
           scaffoldBackgroundColor: backgroundColor
       ),
-      home: const WelcomeScreen(),
+      home: WelcomeScreen(),
     );
   }
 }
