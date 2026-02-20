@@ -69,6 +69,11 @@ this.proimg.value = img;
         UserCredential credential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
 
+        // SEND EMAIL VERIFICATION
+        await credential.user!.sendEmailVerification();
+        Get.snackbar("Verify Email",
+            "Verification link sent to your email. Please verify before login.");
+
         String downloadUrl = await _uploadProPic(image);
 
         myUser user = myUser(name: username, email: email, profilePhoto: downloadUrl, uid: credential.user!.uid);
@@ -78,10 +83,7 @@ this.proimg.value = img;
           "nameLower": username.toLowerCase()  // Ram-->ram
         });
 
-        // SEND EMAIL VERIFICATION
-        await credential.user!.sendEmailVerification();
-        Get.snackbar("Verify Email",
-            "Verification link sent to your email. Please verify before login.");
+
       }
       else{
         Get.snackbar("Fill all the credentials",
