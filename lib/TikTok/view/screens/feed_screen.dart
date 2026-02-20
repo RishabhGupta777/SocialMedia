@@ -51,22 +51,22 @@ class _FeedScreenState extends State<FeedScreen> {
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
                       ),),
-                      Row(
-                        children: [
-                          IconButton(
-                              onPressed:(){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchScreen()));
-                              },
-                              icon: Icon(Icons.search_rounded)
-                          ),
-                          IconButton(
-                              onPressed:(){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatUsers()));
-                              },
-                              icon: Icon(Icons.message_outlined)
-                          ),
-                        ],
-                      )
+                      // Row(
+                      //   children: [
+                      //     IconButton(
+                      //         onPressed:(){
+                      //           Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchScreen()));
+                      //         },
+                      //         icon: Icon(Icons.search_rounded)
+                      //     ),
+                      //     IconButton(
+                      //         onPressed:(){
+                      //           Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatUsers()));
+                      //         },
+                      //         icon: Icon(Icons.message_outlined)
+                      //     ),
+                      //   ],
+                      // )
                     ],
                   ),
                 ),

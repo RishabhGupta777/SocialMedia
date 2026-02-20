@@ -8,6 +8,7 @@ import 'package:tiktok_clone/TikTok/view/screens/add_video.dart';
 import 'package:tiktok_clone/TikTok/view/screens/display_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/feed_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/profile_screen.dart';
+import 'package:tiktok_clone/TikTok/view/screens/search_screen.dart';
 import 'package:tiktok_clone/TikTok/view/widgets/customAddIcon.dart';
 import 'package:flutter/material.dart';
 
@@ -56,23 +57,29 @@ type: BottomNavigationBarType.fixed,
           ),
 
 
+          // BottomNavigationBarItem(
+          //     icon: customAddIcon(),
+          //     label: ''
+          //
+          // ),
+
+          // BottomNavigationBarItem(
+          //     icon: Icon(Icons.video_collection_outlined, size: 25),
+          //     label: 'Shorts'
+          //
+          // ),
+
           BottomNavigationBarItem(
-              icon: customAddIcon(),
+              icon: Icon(Icons.search_rounded, size: 35),
               label: ''
 
           ),
 
           BottomNavigationBarItem(
-              icon: Icon(Icons.video_collection_outlined, size: 25),
-              label: 'Shorts'
+              icon: Icon(Icons.message, size: 25),
+              label: 'Messages'
 
           ),
-
-          // BottomNavigationBarItem(
-          //     icon: Icon(Icons.message, size: 25),
-          //     label: 'Messages'
-          //
-          // ),
 
           BottomNavigationBarItem(
               icon: Icon(Icons.person, size: 25),
@@ -85,9 +92,10 @@ type: BottomNavigationBarType.fixed,
         child: [
           CollegeHomeScreen(),
           FeedScreen(),
-          addVideoScreen(),
-          DisplayVideo_Screen(),
-          // ChatUsers(),
+          // addVideoScreen(),
+          // DisplayVideo_Screen(),
+          SearchScreen(),
+          ChatUsers(),
           ProfileScreen( uid: FirebaseAuth.instance.currentUser?.uid ?? ''),
         ][pageIdx],
       ),
