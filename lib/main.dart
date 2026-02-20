@@ -9,6 +9,7 @@ import 'package:tiktok_clone/College/controller/attendance_provider.dart';
 import 'package:tiktok_clone/TikTok/controller/checkuser.dart';
 import 'package:tiktok_clone/TikTok/controller/firebase_notification_service.dart';
 import 'package:tiktok_clone/TikTok/controller/local_notification_service.dart';
+import 'package:tiktok_clone/TikTok/view/screens/auth/welcome_screen.dart';
 import 'TikTok/constants.dart';
 import 'TikTok/controller/auth_controller.dart';
 
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
 
           scaffoldBackgroundColor: backgroundColor
       ),
-      home: const CheckUser(),
+      home: const WelcomeScreen(),
     );
   }
 }

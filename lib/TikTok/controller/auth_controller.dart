@@ -27,29 +27,24 @@ this.proimg.value = img;
 
 //User State Persistence
 
-
-   late Rx<User?> _user;
+  late Rx<User?> _user;
   User get user => _user.value!;
 
-// _user  - Nadi
-  // _user.bindStream - Nadi Me Color Deko
-  //ever - Aap Ho
   @override
   void onReady() {
     // TODO: implement onReady
     super.onReady();
-    _user = Rx<User?>(FirebaseAuth.instance.currentUser);
-    _user.bindStream(FirebaseAuth.instance.authStateChanges());
-    ever(_user, _setInitialView);
-
     //Rx - Observable Keyword - Continously Checking Variable Is Changing Or Not.
+    _user = Rx<User?>(FirebaseAuth.instance.currentUser);      //_user  - Nadi
+    _user.bindStream(FirebaseAuth.instance.authStateChanges());// _user.bindStream - Nadi Me Color Deko
+    ever(_user, _setInitialView);                              ////ever - Aap Ho
   }
 
   _setInitialView(User? user) async {
     if(user == null){
       Get.offAll(()=> LoginScreen());
     }else{
-      await user.reload();
+      await user.reload();  //->forces Firebase to fetch the latest user data from the server, instead of using the cached copy stored in your Flutter app.
       if (user.emailVerified) {
         Get.offAll(() => HomeScreen());
       } else {
