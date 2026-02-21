@@ -248,14 +248,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           preferredSize: const Size.fromHeight(kToolbarHeight),  //here KTooBarHeight is byDefault and use hatana ho agar then use 48 there
                           child: Container(
                             color: Theme.of(context).colorScheme.surface,
-                            child: const TabBar(
+                            child: TabBar(
                               // isScrollable: true,
                               indicatorColor:primary,
                               unselectedLabelColor: Colors.grey,
                               labelColor:primary,
                               tabs: [
-                                Tab(icon: Icon(Icons.grid_on)),
-                                Tab(icon: Icon(Icons.play_circle_outline)),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Tab(icon: Icon(Icons.grid_on)),
+                                    Text("Activity")
+                                  ],
+                                ),
+                                // Tab(icon: Icon(Icons.play_circle_outline)),
                               ],
                             ),
                           ),
@@ -287,40 +293,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 
                       /// Videos tab (placeholder)
-                      GridView.builder(
-                          padding: EdgeInsets.only(top:60),
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 1,
-                            crossAxisSpacing: 2,
-                            mainAxisSpacing: 2,
-                          ),
-                          itemCount: controller.user['thumbnails'].length,
-                          itemBuilder: (context,index) {
-                            String thumbnail =
-                            controller.user['thumbnails'][index];
-                            return GestureDetector(
-                              onTap: () async {
-                                ///Fetch videos from controller
-                                Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) => DisplayVideo_Screen(
-                                      videos: controller.shorts.obs,
-                                      initialIndex: index,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                imageUrl: thumbnail,
-                                errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
-                              ),
-                            );
-                          }),
+                      // GridView.builder(
+                      //     padding: EdgeInsets.only(top:60),
+                      //     physics: NeverScrollableScrollPhysics(),
+                      //     shrinkWrap: true,
+                      //     gridDelegate:
+                      //     SliverGridDelegateWithFixedCrossAxisCount(
+                      //       crossAxisCount: 3,
+                      //       childAspectRatio: 1,
+                      //       crossAxisSpacing: 2,
+                      //       mainAxisSpacing: 2,
+                      //     ),
+                      //     itemCount: controller.user['thumbnails'].length,
+                      //     itemBuilder: (context,index) {
+                      //       String thumbnail =
+                      //       controller.user['thumbnails'][index];
+                      //       return GestureDetector(
+                      //         onTap: () async {
+                      //           ///Fetch videos from controller
+                      //           Navigator.push(context, MaterialPageRoute(
+                      //               builder: (context) => DisplayVideo_Screen(
+                      //                 videos: controller.shorts.obs,
+                      //                 initialIndex: index,
+                      //               ),
+                      //             ),
+                      //           );
+                      //         },
+                      //         child: CachedNetworkImage(
+                      //           fit: BoxFit.cover,
+                      //           imageUrl: thumbnail,
+                      //           errorWidget: (context, url, error) =>
+                      //               Icon(Icons.error),
+                      //         ),
+                      //       );
+                      //     }),
                     ],
                   ),
                 ),

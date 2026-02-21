@@ -110,7 +110,7 @@ class PostUploadController extends GetxController {
       await FirebaseFirestore.instance.collection("posts").doc(id).set(post.toJson());
 
       Get.snackbar("Success", "Post Uploaded Successfully");
-      Get.to(HomeScreen());
+      Get.offAll(HomeScreen());
 
       // Clear selected media after posting
       mediaFiles.clear();
