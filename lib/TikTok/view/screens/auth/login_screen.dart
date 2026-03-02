@@ -1,13 +1,9 @@
 import 'package:tiktok_clone/TikTok/controller/auth_controller.dart';
 import 'package:tiktok_clone/TikTok/view/screens/auth/forgot_password_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/auth/signup_screen.dart';
-import 'package:tiktok_clone/TikTok/view/screens/auth/verify_email_screen.dart';
 import 'package:tiktok_clone/TikTok/view/widgets/glitch.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/TikTok/view/widgets/rounded_container.dart';
-
-
 import '../../widgets/text_input.dart';
 
 class LoginScreen extends StatelessWidget {

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:tiktok_clone/TikTok/model/user.dart';
 import 'package:tiktok_clone/TikTok/view/screens/auth/verify_email_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/home_screen.dart';
@@ -14,6 +15,18 @@ class AuthController extends GetxController {
   static AuthController instance = Get.find();
   // Make proimg reactive
   Rx<File?> proimg = Rx<File?>(null);
+
+  /// Loader methods
+  void _showLoader() {
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
+  }
+
+  void _hideLoader() {
+    if (Get.isDialogOpen ?? false) Get.back();
+  }
 
 void pickImage() async{
   print("IMAGE PICKED SUCCESSFULLY");
@@ -66,14 +79,14 @@ this.proimg.value = img;
       String username, String email, String password, File? image) async {
     try {
       if (username.isNotEmpty && email.isNotEmpty && password.isNotEmpty && image != null) {
+        _showLoader();
         UserCredential credential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
 
         // SEND EMAIL VERIFICATION
         await credential.user!.sendEmailVerification();
-        Get.snackbar("Verify Email",
-            "Verification link sent to your email. Please verify before login.");
 
+        //upload image and data
         String downloadUrl = await _uploadProPic(image);
 
         myUser user = myUser(name: username, email: email, profilePhoto: downloadUrl, uid: credential.user!.uid);
@@ -83,7 +96,10 @@ this.proimg.value = img;
           "nameLower": username.toLowerCase()  // Ram-->ram
         });
 
-
+        //hid loader and snackBar popup
+        _hideLoader();
+        Get.snackbar("Verify Email",
+            "Verification link sent to your email. Please verify before login.");
       }
       else{
         Get.snackbar("Fill all the credentials",
@@ -91,6 +107,7 @@ this.proimg.value = img;
       }
     } catch (e) {
       print(e);
+      _hideLoader();
       Get.snackbar("Error Occurred", e.toString());
     }
   }
@@ -114,10 +131,12 @@ this.proimg.value = img;
         Get.snackbar("Error", "Enter email and password");
         return;
       }
+      _showLoader();
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email, password: password);
-
+      // _hideLoader();---> already managed by setInitialView
     } catch (e) {
+      _hideLoader();
       Get.snackbar("Login Error", e.toString());
     }
   }
@@ -131,18 +150,25 @@ this.proimg.value = img;
         Get.snackbar("Error", "Login first to resend verification email");
         return;
       }
-
+      _showLoader();
       await user.sendEmailVerification();
+      _hideLoader();
+
       Get.snackbar("Sent", "Verification email sent again.");
     } catch (e) {
+      _hideLoader();
       Get.snackbar("Error", e.toString());
     }
   }
 
 
-  signOut(){
-    FirebaseAuth.instance.signOut();
-    Get.offAll(LoginScreen());
+  signOut() async {
+    _showLoader();
+    await FirebaseAuth.instance.signOut();
+    // wait due to setInitialView Take 2 second for go to logoutScreen
+    //await Future.delayed(const Duration(seconds: 2));---> already managed by setInitialView
+    // _hideLoader();---> already managed by setInitialView
+    // Get.offAll(LoginScreen());---> already managed by setInitialView
   }
 
   ///forgot password
@@ -152,8 +178,9 @@ this.proimg.value = img;
         Get.snackbar("Error", "Please enter your email");
         return;
       }
-
+      _showLoader();
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      _hideLoader();
 
       Get.snackbar(
         "Password Reset",
@@ -162,6 +189,7 @@ this.proimg.value = img;
 
       Get.offAll(() => LoginScreen());
     } catch (e) {
+      _hideLoader();
       Get.snackbar("Error", e.toString());
     }
   }
