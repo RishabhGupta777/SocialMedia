@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/College/view/screens/attendence_login_screen.dart';
 import 'package:tiktok_clone/College/view/screens/webview_screen.dart';
+import 'package:tiktok_clone/TikTok/view/widgets/glitch.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CollegeHomeScreen extends StatelessWidget {
@@ -9,14 +10,22 @@ class CollegeHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("DCRUST"),
-      ),
       body:SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 25),
+            GlithEffect(
+              child: const Text(
+                "Welcome to DCRUST",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
             // College Banner
             Container(
               width: double.infinity,
@@ -31,17 +40,7 @@ class CollegeHomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
 
-            // Welcome text
-            const Text(
-              "Welcome to DCRUST App",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 22),
 
             // Cards Section
             GridView.count(
@@ -89,6 +88,18 @@ class CollegeHomeScreen extends StatelessWidget {
                 ),
                 featureCard(
                   context,
+                  title: "Exam Papers",
+                  icon: Icons.menu_book,
+                  color: Colors.yellowAccent,
+                  onTap: () async{
+                    await launchUrl(
+                      Uri.parse('https://www.dcrustedp.in/dcrustpqp.php'),
+                      mode: LaunchMode.inAppBrowserView,
+                    );
+                  },
+                ),
+                featureCard(
+                  context,
                   title: "Mess Bill Payment",
                   icon: Icons.payment,   //account_circle
                   color: Colors.teal,
@@ -96,6 +107,18 @@ class CollegeHomeScreen extends StatelessWidget {
                     final url = Uri.parse('https://paydirect.eduqfix.com/app/ivc8qLFIfMH3IkmOAJJkSR5K6fH7m1ouD734FXKDUWdtf0JWkIDM7EKkYVHPP3bM/2663/');
                     await launchUrl(
                       url,
+                      mode: LaunchMode.inAppBrowserView,
+                    );
+                  },
+                ),
+                featureCard(
+                  context,
+                  title: "Hostel Fee Payment",
+                  icon: Icons.home_work,
+                  color: Colors.orange,
+                  onTap: () async{
+                    await launchUrl(
+                      Uri.parse('https://form.qfixonline.com/dcrusthostelsallotmentfees'),
                       mode: LaunchMode.inAppBrowserView,
                     );
                   },
@@ -113,14 +136,14 @@ class CollegeHomeScreen extends StatelessWidget {
                 // ),
                 featureCard(
                   context,
-                  title: "Exam Papers",
-                  icon: Icons.menu_book,
-                  color: Colors.yellowAccent,
+                  title: "DateSheet",
+                  icon: Icons.calendar_month_outlined,
+                  color: Colors.indigo,
                   onTap: () async{
-                      await launchUrl(
-                         Uri.parse('https://www.dcrustedp.in/dcrustpqp.php'),
-                         mode: LaunchMode.inAppBrowserView,
-                      );
+                    await launchUrl(
+                      Uri.parse('https://www.dcrustedp.in/datesheetNew.php'),
+                      mode: LaunchMode.inAppBrowserView,
+                    );
                   },
                 ),
                 featureCard(
@@ -131,31 +154,6 @@ class CollegeHomeScreen extends StatelessWidget {
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (context) => const WebViewScreen(url: 'https://www.dcrustedp.in/about.php'),),
-                    );
-                  },
-                ),
-                featureCard(
-                  context,
-                  title: "Hostel Fee Payment",
-                  icon: Icons.home_work,
-                  color: Colors.orange,
-                  onTap: () async{
-                    await launchUrl(
-                      Uri.parse('https://form.qfixonline.com/dcrusthostelsallotmentfees'),
-                      mode: LaunchMode.inAppBrowserView,
-                    );
-                  },
-                ),
-
-                featureCard(
-                  context,
-                  title: "DateSheet",
-                  icon: Icons.calendar_month_outlined,
-                  color: Colors.indigo,
-                  onTap: () async{
-                    await launchUrl(
-                      Uri.parse('https://www.dcrustedp.in/datesheetNew.php'),
-                      mode: LaunchMode.inAppBrowserView,
                     );
                   },
                 ),

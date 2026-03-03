@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiktok_clone/TikTok/model/post.dart';
@@ -14,16 +15,24 @@ class PostUploadController extends GetxController {
   static PostUploadController instance = Get.find();
   var uuid = Uuid();
 
+  /// Loader methods
+  void _showLoader() {
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
+  }
+  void _hideLoader() {
+    if (Get.isDialogOpen ?? false) Get.back();
+  }
+
   // ---------- Generate Video Thumbnail ----------
   Future<File> _getThumb(String videoPath) async {
     final thumbnail = await VideoCompress.getFileThumbnail(videoPath);
     return thumbnail;
   }
 
-
-
   final ImagePicker picker = ImagePicker();
-
   RxList<XFile> mediaFiles = <XFile>[].obs;
 
   Future<void> pickMultipleMedia() async {
@@ -67,6 +76,8 @@ class PostUploadController extends GetxController {
   // ---------- Upload Post (Image or Video) ----------
   Future<void> uploadPost(String caption) async {
     try {
+      _showLoader(); /// START LOADER
+
       String uid = FirebaseAuth.instance.currentUser!.uid;
       DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection("users").doc(uid).get();
 
@@ -90,6 +101,7 @@ class PostUploadController extends GetxController {
 
       // Allow posting even if caption only (no media)
       if (caption.trim().isEmpty && mediaList.isEmpty) {
+        _hideLoader(); /// STOP LOADER
         Get.snackbar("Error", "Please write something or add media first");
         return;
       }
@@ -109,12 +121,14 @@ class PostUploadController extends GetxController {
 
       await FirebaseFirestore.instance.collection("posts").doc(id).set(post.toJson());
 
+      _hideLoader(); /// STOP LOADER
       Get.snackbar("Success", "Post Uploaded Successfully");
       Get.offAll(HomeScreen());
 
       // Clear selected media after posting
       mediaFiles.clear();
     } catch (e) {
+      _hideLoader(); /// STOP LOADER IF ERROR
       print(e);
       Get.snackbar("Error", e.toString());
     }

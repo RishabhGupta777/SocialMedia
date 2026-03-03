@@ -9,6 +9,7 @@ import 'package:tiktok_clone/TikTok/controller/edit_profile_controller.dart';
 import 'package:tiktok_clone/TikTok/controller/profile_controller.dart';
 import 'package:tiktok_clone/TikTok/model/video.dart';
 import 'package:tiktok_clone/TikTok/view/screens/display_screen.dart';
+import 'package:tiktok_clone/TikTok/view/screens/drawerScreen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/edit_profile_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/followers_screen.dart';
 import 'package:tiktok_clone/TikTok/view/screens/followings_screen.dart';
@@ -40,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // init: ProfileController(),
         builder: (controller) {
           return DefaultTabController(
-            length: 2,
+            length: 1,
             child: Scaffold(
               appBar:AppBar(
                 title: Text(
@@ -53,7 +54,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   IconButton(
                     onPressed: () {
                       widget.uid == FirebaseAuth.instance.currentUser!.uid
-                          ? authController.signOut()
+                          ?
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DrawerScreen()
+                        ),
+                      )
                           : //Get.snackbar("NanoGram App", "Current Version 1.0")
                       Navigator.push(
                         context,
@@ -66,7 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                     icon: Icon(
                         widget.uid == FirebaseAuth.instance.currentUser!.uid
-                            ? Icons.logout  //info_outline-->icon tha
+                            ? Icons.menu  //info_outline-->icon tha
                             : Icons.chat),
                   )
                 ],
