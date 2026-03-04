@@ -99,7 +99,7 @@ this.proimg.value = img;
         //hid loader and snackBar popup
         _hideLoader();
         Get.snackbar("Verify Email",
-            "Verification link sent to your email in Spam section . Please verify before login.");
+            "Verification link sent to your email in Spam section. Please verify before login.");
       }
       else{
         Get.snackbar("Fill all the credentials",
