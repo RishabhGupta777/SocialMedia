@@ -69,11 +69,16 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
           child: Column(
             children: [
               const SizedBox(height: 10),
+              Text(
+                "Verification link sent to your email in Spam section.",
+                style: TextStyle(color: Colors.grey),
+              ),
+              const SizedBox(height: 2),
               const Text(
                 "After verifying, this screen will close automatically.",
                 style: TextStyle(color: Colors.grey),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
               const Icon(Icons.mark_email_unread, size: 90, color: Colors.blue),
               const SizedBox(height: 20),
               const Text(

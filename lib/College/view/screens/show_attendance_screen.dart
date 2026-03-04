@@ -91,7 +91,14 @@ class _ShowAttendanceScreenState extends State<ShowAttendanceScreen> {
           ? const Center(child: CircularProgressIndicator())
           : isError
           ? const Center(
-        child: Text("Failed to load attendance. Please try again."),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Failed to load attendance!."),
+            Text("Your Roll no. or Samarth Portal Password may be Wrong."),
+            Text("Please try again.")
+          ],
+        ),
       )
           : ListView.builder(
         padding: const EdgeInsets.all(10),
