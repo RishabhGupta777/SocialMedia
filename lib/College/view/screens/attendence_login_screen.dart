@@ -6,6 +6,7 @@ import 'package:tiktok_clone/College/view/screens/show_attendance_screen.dart';
 import 'package:tiktok_clone/TikTok/view/widgets/glitch.dart';
 import 'package:tiktok_clone/TikTok/view/widgets/rounded_container.dart';
 import 'package:tiktok_clone/TikTok/view/widgets/text_input.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AttendanceLoginScreen extends StatefulWidget {
   AttendanceLoginScreen({super.key});
@@ -68,7 +69,21 @@ class _AttendanceLoginScreenState extends State<AttendanceLoginScreen> {
                 toHide: true,
               ),
             ),
-            SizedBox(height: 30,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal:9.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(width: 10,),
+                  TextButton(onPressed: ()async{
+                    await launchUrl(
+                    Uri.parse('https://dcrustm.samarth.edu.in/index.php/studentlogin/registration/reset-password'),
+                    mode: LaunchMode.inAppBrowserView,
+                    );
+                  }, child:const Text("Forgot password?")),
+                ],
+              ),
+            ),
             ElevatedButton(onPressed: (){
                   final username = _usernameController.text.trim();
                   final password = _passwordController.text.trim();
