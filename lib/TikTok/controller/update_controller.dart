@@ -5,7 +5,7 @@ import 'package:tiktok_clone/TikTok/view/screens/update_screen.dart';
 
 class UpdateController extends GetxController {
 
-  Future<void> checkForUpdate() async {
+  Future<void> checkForUpdate({bool showMessageIfUpToDate = false}) async {
     try {
       var doc = await FirebaseFirestore.instance
           .collection('app_config')
@@ -28,11 +28,14 @@ class UpdateController extends GetxController {
         );
       }
       else{
-        Get.snackbar(
-          "Up To Date",
-          "You are using the latest version 🎉",
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        ///Only show snackbar if explicitly allowed
+        if (showMessageIfUpToDate) {
+          Get.snackbar(
+            "Up To Date",
+            "You are using the latest version 🎉",
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        }
       }
 
     } catch (e) {

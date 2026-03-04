@@ -16,7 +16,7 @@ class DrawerScreen extends StatelessWidget {
         children: [
           ListTile(
             onTap: (){
-              Get.find<UpdateController>().checkForUpdate();
+              Get.find<UpdateController>().checkForUpdate(showMessageIfUpToDate: true);
             },
             leading: const Icon(Icons.security_update),
             title: const Text('New update'),
