@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tiktok_clone/Chat/view/screens/chat_users.dart';
@@ -80,21 +81,20 @@ class _FeedScreenState extends State<FeedScreen> {
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen(uid:profileInfoController.userUid)));
                           },
-                          child: ClipOval(
-                            child: SizedBox(
-                              width: 35,
-                              height: 35,
-                              child:Obx(() {
-                                if (profileInfoController.isLoading.value) {
-                                  return CircularProgressIndicator(strokeWidth: 2);
-                                }
-                                return Image.network(
+                          child: Obx(() {
+                                return CachedNetworkImage(
+                                  imageUrl:
                                   profileInfoController.userProfilePic,
-                                  fit: BoxFit.cover,
+                                  imageBuilder: (context, imageProvider) =>
+                                      CircleAvatar(
+                                        radius: 18,
+                                        backgroundImage: imageProvider,
+                                      ),
+                                  placeholder: (context, url) => const CircularProgressIndicator(strokeWidth: 1),
+                                  //errorWidget: (context, url, error) => const Icon(Icons.error),
                                 );
                               }),
-                            ),
-                          ),
+
                         ),
                       ),
                       const SizedBox(width: 10),

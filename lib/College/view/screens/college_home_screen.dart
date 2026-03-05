@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/College/view/screens/attendence_login_screen.dart';
 import 'package:tiktok_clone/College/view/screens/webview_screen.dart';
 import 'package:tiktok_clone/TikTok/view/widgets/glitch.dart';
+import 'package:tiktok_clone/TikTok/view/widgets/rounded_container.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CollegeHomeScreen extends StatelessWidget {
@@ -27,17 +29,13 @@ class CollegeHomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             // College Banner
-            Container(
+            TRoundedContainer(
+              radius: 16,
+              height: 170,
               width: double.infinity,
-              height: 160,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                image: const DecorationImage(
-                  image: NetworkImage(
-                    "https://media.collegedekho.com/media/img/institute/crawled_images/None/TRYTRTYERWYERTY.jpg", // example image
-                  ),
-                  fit: BoxFit.cover,
-                ),
+              child: CachedNetworkImage(
+                imageUrl: "https://media.collegedekho.com/media/img/institute/crawled_images/None/TRYTRTYERWYERTY.jpg", // example image,
+                fit: BoxFit.cover,
               ),
             ),
 

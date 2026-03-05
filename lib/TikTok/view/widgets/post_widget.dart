@@ -45,6 +45,15 @@ class PostWidget extends StatelessWidget {
                         child: Image.network(
                           data.profilePic,
                           fit: BoxFit.cover,
+                          // While loading
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return const Center(child: CircularProgressIndicator(),);
+                          },
+                          // If network fails / offline
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(child: CircularProgressIndicator(),);
+                          },
                         ),
                       ),
                     ),
@@ -264,6 +273,15 @@ class PostWidget extends StatelessWidget {
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
+            // While loading
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return const Center(child: CircularProgressIndicator(),);
+            },
+            // If network fails / offline
+            errorBuilder: (context, error, stackTrace) {
+              return const Center(child: CircularProgressIndicator(),);
+            },
           );
         }
 
