@@ -92,11 +92,11 @@ class ProfileController extends GetxController {
         "following": following,
         "isFollowing": isFollowing,
       };
-
+      isLoading.value = false;
     } catch(e){
       print("Error loading profile: $e");
-    }finally {
-      isLoading.value = false;
+      Get.snackbar("Try again!",
+          "Your Internet connection may be slow or off");
     }
   }
 
