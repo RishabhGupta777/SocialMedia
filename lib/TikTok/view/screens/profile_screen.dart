@@ -25,30 +25,43 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final ProfileController profileController = Get.put(ProfileController());
+  /// Instead of Get.put(), we create a new controller for EACH profile screen
+  late final ProfileController profileController;
   final AuthController authController = Get.put(AuthController());
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    profileController.updateUseId(widget.uid);
+    /// Use Get.put() to generate separate controller instance
+    /// Create controller with UNIQUE TAG (uid based)
+    profileController = Get.put(ProfileController(), tag: widget.uid,);
+
+    /// Load user using direct method (no Rx _uid variable anymore)
+    profileController.loadUser(widget.uid);
+  }
+
+  @override
+  void dispose() {
+    /// Delete only this profile's controller
+    Get.delete<ProfileController>(tag: widget.uid);
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ProfileController>(
-      // init: ProfileController(),
-        builder: (controller) {
-          return DefaultTabController(
+    return Obx(() {
+      if (profileController.isLoading.value) {
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      }
+      final user = profileController.user;
+      return DefaultTabController(
             length: 1,
             child: Scaffold(
               appBar:AppBar(
-                title: Text(
-                  controller.isLoading.value
-                      ? '' //can be Loading... here
-                      : controller.user['name'] ?? 'No Name',
-                ),
+                title:Text(user["name"] ?? ""),
                 centerTitle: false,
                 actions: [
                   IconButton(
@@ -78,11 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   )
                 ],
               ),
-              body:   controller.isLoading.value
-                  ? Center(
-                child: CircularProgressIndicator(),
-              )
-                  : NestedScrollView(
+              body:  NestedScrollView(
                 headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                   return [
                     SliverOverlapAbsorber(
@@ -111,24 +120,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               backgroundImage: null,
                                               child: CachedNetworkImage(
                                                 imageUrl:
-                                                profileController.user['profilePic'],
+                                                user['profilePic'],
                                                 imageBuilder: (context, imageProvider) =>
                                                     CircleAvatar(
                                                       radius: 55,
                                                       backgroundImage: imageProvider,
                                                     ),
-                                                placeholder: (context, url) =>
-                                                const CircularProgressIndicator(),
-                                                errorWidget: (context, url, error) =>
-                                                const Icon(Icons.error),
+                                                placeholder: (context, url) => const CircularProgressIndicator(),
+                                                //errorWidget: (context, url, error) => const Icon(Icons.error),
                                               ),
                                             ),
                                             SizedBox(
                                               width: 40,
                                             ),
+                                            /// FOLLOWERS & FOLLOWING
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
+                                                /// Followers
                                                 InkWell(
                                                   onTap: () {
                                                     Navigator.push(
@@ -145,7 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     MainAxisAlignment.center,
                                                     children: [
                                                       Text(
-                                                        controller.user['followers'],
+                                                        user['followers'].toString(),
                                                         style: TextStyle(
                                                             fontSize: 20,
                                                             fontWeight: FontWeight.w700),
@@ -164,6 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 SizedBox(
                                                   width: 25,
                                                 ),
+                                                /// Following
                                                 InkWell(
                                                   onTap: () {
                                                     Navigator.push(
@@ -180,7 +190,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     MainAxisAlignment.center,
                                                     children: [
                                                       Text(
-                                                        controller.user['following'],
+                                                        user['following'].toString(),
                                                         style: TextStyle(
                                                             fontSize: 20,
                                                             fontWeight: FontWeight.w700),
@@ -201,17 +211,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                           ],
                                         ),
-                                        controller.user['about'].trim().isEmpty
+
+                                        ///ABOUT
+                                        user['about'].toString().trim().isEmpty
                                             ? const SizedBox.shrink()
                                             : Column(
                                           children: [
                                             const SizedBox(height: 30),
-                                            Text(controller.user['about']),
+                                            Text(user['about']),
                                           ],
                                         ),
                                         SizedBox(
-                                          height: 30,
+                                          height: 25,
                                         ),
+                                        /// FOLLOW / EDIT BUTTON
                                         TButton(
                                           height: 35,
                                           width: 130,
@@ -228,14 +241,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 ),
                                               );
                                             } else {
-                                              controller.followUser();
+                                              profileController.followUser();
                                             }
                                           },
                                           text:widget.uid ==
                                               FirebaseAuth
                                                   .instance.currentUser!.uid
                                               ? "Edit Profile"
-                                              : controller.user['isFollowing']
+                                              : user['isFollowing']
                                               ? "Following"
                                               : "Follow",
                                         ),
@@ -257,15 +270,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             color: Theme.of(context).colorScheme.surface,
                             child: TabBar(
                               // isScrollable: true,
-                              indicatorColor:primary,
+                              dividerHeight:4,
+                              dividerColor: Colors.grey,
+                              indicatorColor:Colors.grey,//yha primary tha
                               unselectedLabelColor: Colors.grey,
-                              labelColor:primary,
+                              labelColor:Colors.grey,
                               tabs: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  // mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Tab(icon: Icon(Icons.grid_on)),
-                                    Text("Activity")
+                                    Tab(icon: Icon(Icons.grid_on,size:25,)),
+                                    SizedBox(width:10),
+                                    Text("Your Activity",style: TextStyle(fontSize: 18),)
                                   ],
                                 ),
                                 // Tab(icon: Icon(Icons.play_circle_outline)),
@@ -282,21 +298,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: TabBarView(
                     children:[
                       /// Posts tab
-                  Padding(
-                    padding: const EdgeInsets.only(top:60.0),
-                    child: CustomScrollView(
-                    slivers: [
-                    SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                                    final data = controller.posts[index];
-                                    return PostWidget(data: data);
-                                    },
-                    childCount: controller.posts.length,
-                                    ),
-                                  ),
-                    ]),
-                  ),
+                      Obx(() {
+                        return ListView.builder(
+                          padding:
+                          const EdgeInsets.only(top: 60),
+                          itemCount:
+                          profileController.posts.length,
+                          itemBuilder: (context, index) {
+                            final data =
+                            profileController.posts[index];
+                            return PostWidget(data: data);
+                          },
+                        );
+                      }),
 
 
                       /// Videos tab (placeholder)

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tiktok_clone/Chat/view/widgets/attach_icons.dart';
@@ -18,10 +19,19 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController textEditingController = TextEditingController();
-  EditProfileController editProfileController = Get.put(EditProfileController());
-  final ProfileController profileController = Get.put(ProfileController());
 
-  void _editInfo(String title, VoidCallback onSave) {
+  late final ProfileController profileController;
+  final EditProfileController editProfileController = Get.put(EditProfileController());
+
+  @override
+  void initState() {
+    super.initState();
+    final currentUid = FirebaseAuth.instance.currentUser!.uid;
+    profileController = Get.find<ProfileController>(tag: currentUid);
+  }
+
+
+void _editInfo(String title, VoidCallback onSave) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -74,6 +84,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,13 +112,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               backgroundColor: Colors.grey[200],
                               backgroundImage: null,
                               child: CachedNetworkImage(
-                                imageUrl: profileController.user['profilePic'],
+                                imageUrl: profileController.user['profilePic'] ?? '',
                                 imageBuilder: (context, imageProvider) => CircleAvatar(
                                   radius: 77,
                                   backgroundImage: imageProvider,
                                 ),
                                 placeholder: (context, url) => const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) => const Icon(Icons.error),
+                                //errorWidget: (context, url, error) => const Icon(Icons.error),
                               ),
                             ),
                         // Camera Icon Positioned Bottom Right
@@ -171,7 +182,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 const SizedBox(height: 40,),
                 Information(
                   onTap:(){
-                    textEditingController.text=profileController.user['name'];
+                    textEditingController.text=profileController.user['name'] ?? '';
                     _editInfo(
                       "Name",
                         () {
@@ -182,11 +193,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   },
                   icon:const Icon(Icons.person_outline_sharp),
                   infoName:'Name',
-                  info: profileController.user['name'],
+                  info: profileController.user['name'] ?? '',
                 ),
                 Information(
                   onTap:(){
-                    textEditingController.text=profileController.user['about'];
+                    textEditingController.text=profileController.user['about'] ?? '';
                     _editInfo(
                         "About",
                             () {
@@ -197,7 +208,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   },
                   icon:const Icon(Icons.info_outline),
                   infoName:'About',
-                  info: profileController.user['about'],
+                  info: profileController.user['about'] ?? '',
                 ),
                 Information(
                   onTap:(){},

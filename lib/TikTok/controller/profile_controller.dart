@@ -4,152 +4,150 @@ import 'package:get/get.dart';
 import 'package:tiktok_clone/TikTok/model/post.dart';
 import 'package:tiktok_clone/TikTok/model/video.dart';
 
-class ProfileController extends GetxController{
-final Rx<Map<String, dynamic>> _user = Rx<Map<String, dynamic>>({});
-Map<String, dynamic> get user => _user.value;
+class ProfileController extends GetxController {
+  final RxMap<String, dynamic> user = <String, dynamic>{}.obs;
 
-final Rx<List<Post>> _posts = Rx<List<Post>>([]);
-List<Post> get posts => _posts.value;
+  final RxList<Post> posts = <Post>[].obs;
+  final RxList<Video> shorts = <Video>[].obs;
 
-final Rx<List<Video>> _shorts = Rx<List<Video>>([]);
-List<Video> get shorts => _shorts.value;
+  RxBool isLoading = false.obs;
 
-RxBool isLoading = false.obs;
-  Rx<String> _uid = "".obs;
+  String? profileUid;  ///STORE UID LOCALLY PER CONTROLLER
 
-  updateUseId(String uid){
-
-    _uid.value = uid;
-    getUserDat();
-  }
-
-
-  getUserDat() async {
+  /// RENAMED (professional naming)
+  Future<void> loadUser(String uid) async {
     try{
       isLoading.value = true;
+      profileUid = uid;   /// STORE UID
 
-      List<String> thumbnails = [];
-    var myVideos = await FirebaseFirestore.instance.collection("videos").where(
-        "uid", isEqualTo: _uid.value).orderBy("timestamp", descending: true).get();
-    for (int i = 0; i < myVideos.docs.length; i++) {
-      thumbnails.add((myVideos.docs[i].data() as dynamic)['thumbnail']);
-    }
+      /// BIND POSTS STREAM
+      posts.bindStream(
+        FirebaseFirestore.instance
+            .collection("posts")
+            .where("uid", isEqualTo: uid)
+            .orderBy("datePub", descending: true)
+            .snapshots()
+            .map((snapshot) =>
+            snapshot.docs.map((e) => Post.fromSnap(e)).toList()),
+      );
 
+      /// BIND SHORTS STREAM
+      shorts.bindStream(
+        FirebaseFirestore.instance
+            .collection("videos")
+            .where("uid", isEqualTo: uid)
+            .orderBy("timestamp", descending: true)
+            .snapshots()
+            .map((snapshot) =>
+            snapshot.docs.map((e) => Video.fromSnap(e)).toList()),
+      );
 
-    ///Shorts
-      _shorts.value=[];
-      _shorts.bindStream(
-          FirebaseFirestore.instance
-              .collection("videos")
-              .orderBy("timestamp", descending: true)
-              .where("uid", isEqualTo: _uid.value)
-              .snapshots()
-              .map((QuerySnapshot query){
-            List<Video> retVal  = [];
-            for(var element in query.docs){
-              retVal.add(Video.fromSnap(element));
-            }
-            return retVal;
-          }));
+      /// USER DATA
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection("users").doc(uid).get();
 
-      ///Post Binding
-      _posts.value=[];
-      _posts.bindStream(
-          FirebaseFirestore.instance
-              .collection("posts")
-              .orderBy("datePub", descending: true)
-              .where("uid", isEqualTo: _uid.value)
-              .snapshots()
-              .map((QuerySnapshot query){
-        List<Post> retVal  = [];
-        for(var element in query.docs){
-          retVal.add(Post.fromSnap(element));
+      DocumentSnapshot userInfoDoc = await FirebaseFirestore.instance
+          .collection("usersInfo").doc(uid).get();
+
+      int followers = (await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .collection("followers")
+          .get())
+          .docs
+          .length;
+
+      int following = (await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .collection("following")
+          .get())
+          .docs
+          .length;
+
+      bool isFollowing = false;
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .collection("followers")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get()
+          .then((value) {
+        if (value.exists) {
+          //FOLLOW KRTA HAI
+          isFollowing = true;
+        } else {
+          //FOLLOW NHI KRTA HAI
+          isFollowing = false;
         }
-        return retVal;
-      }));
+      });
 
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection(
-        "users").doc(_uid.value).get();
-    DocumentSnapshot userInfoDoc = await FirebaseFirestore.instance.collection(
-        "usersInfo").doc(_uid.value).get();
+      user.value = {
+        "name": userDoc["name"] ?? " ",
+        "profilePic": userDoc["profilePic"] ?? " ",
+        "about": userInfoDoc.exists
+            ? (userInfoDoc.data() as Map<String, dynamic>)["about"] ?? ""
+            : "",
+        "followers": followers,
+        "following": following,
+        "isFollowing": isFollowing,
+      };
 
-    String name = userDoc['name'];
-    String profilePic = userDoc['profilePic'];
-    String about = " ";
-    int likes = 0;
-    int followers = 0;
-    int following = 0;
-    bool isFollowing = false;
-
-    ///For about
-    if (userInfoDoc.exists) {
-      // only access field if the document exists
-      final data = userInfoDoc.data() as Map<String, dynamic>;
-      about = data['about'] ?? " ";
-    }
-
-    for (var item in myVideos.docs) {
-      likes += (item.data()['likes'] as List).length;
-    }
-
-    var followerDoc = await FirebaseFirestore.instance.collection("users").doc(
-        _uid.value).collection("followers").get();
-    var followingDoc = await FirebaseFirestore.instance.collection("users").doc(
-        _uid.value).collection("following").get();
-
-    followers = followerDoc.docs.length;
-    following = followingDoc.docs.length;
-
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(_uid.value)
-        .collection("followers")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get().then((value) {
-      if (value.exists) {
-        //FOLLOW KRTA HAI
-        isFollowing = true;
-      } else {
-        //FOLLOW NHI KRTA HAI
-        isFollowing = false;
-      }
-    });
-
-
-    _user.value = {
-      'followers': followers.toString(),
-      'following': following.toString(),
-      'likes': likes.toString(),
-      'profilePic': profilePic,
-      'name': name,
-      'about': about,
-      'isFollowing': isFollowing,
-      'thumbnails': thumbnails
-    };
-
-    update();
-  }catch (e) {
-      print("Error loading user data: $e");
-    } finally {
+    } catch(e){
+      print("Error loading profile: $e");
+    }finally {
       isLoading.value = false;
     }
   }
 
-  followUser() async{
-    var doc = await FirebaseFirestore.instance.collection("users").doc(_uid.value).collection("followers").doc(FirebaseAuth.instance.currentUser!.uid).get();
+  /// FOLLOW / UNFOLLOW (Optimized)
+  Future<void> followUser() async {
+    if (profileUid == null) return;
 
-    if(!doc.exists){
-      await FirebaseFirestore.instance.collection("users").doc(_uid.value).collection("followers").doc(FirebaseAuth.instance.currentUser!.uid).set({});
-      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("following").doc(_uid.value).set({});
-      _user.value.update('followers', (value) => (int.parse(value) + 1).toString());
-    }else{
-      await FirebaseFirestore.instance.collection("users").doc(_uid.value).collection("followers").doc(FirebaseAuth.instance.currentUser!.uid).delete();
-      await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).collection("following").doc( _uid.value).delete();
-      _user.value.update('followers', (value) => (int.parse(value) - 1).toString());
+    final currentUid = FirebaseAuth.instance.currentUser!.uid;
+
+    var doc = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(profileUid)
+        .collection("followers")
+        .doc(currentUid)
+        .get();
+
+    if (!doc.exists) {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(profileUid)
+          .collection("followers")
+          .doc(currentUid)
+          .set({});
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(currentUid)
+          .collection("following")
+          .doc(profileUid)
+          .set({});
+
+      user.update("followers", (val) => val + 1);
+      user.update("isFollowing", (val) => true);
+    } else {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(profileUid)
+          .collection("followers")
+          .doc(currentUid)
+          .delete();
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(currentUid)
+          .collection("following")
+          .doc(profileUid)
+          .delete();
+
+      user.update("followers", (val) => val - 1);
+      user.update("isFollowing", (val) => false);
     }
-
-    _user.value.update('isFollowing', (value) => !value);
-    update();
   }
-
 }
+
